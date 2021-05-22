@@ -8,7 +8,7 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 
-public class Tests extends BaseTest{
+public class Tests {
     public WebDriver driver;
     final static Logger logger = Logger.getLogger(Tests.class);
 
@@ -16,9 +16,9 @@ public class Tests extends BaseTest{
     public void setUp() throws InterruptedException {
         Thread.sleep(10);
 
-        logger.info("--- TEST BAŞLADI ---");
+        logger.info("TEST BAŞLIYOR!");
         System.setProperty("webdriver.chrome.driver", "drivers/chromedriver.exe");
-        driver = new ChromeDriver();
+        WebDriver driver = new ChromeDriver();
         driver.manage().window().maximize();
 
 
@@ -31,17 +31,17 @@ public class Tests extends BaseTest{
 
         Assert.assertEquals(driver.getTitle(), "GittiGidiyor - Türkiye'nin Öncü Alışveriş Sitesi");
 
-        logger.info("Anasayfaya girildi"); //
+        logger.info("Ana sayfanın açıldığı kontrol ediliyor."); //
 
         driver.navigate().to("https://www.gittigidiyor.com/uye-girisi");
         driver.findElement(By.id("L-UserNameField")).sendKeys("USERNAME");
         driver.findElement(By.id("L-PasswordField")).sendKeys("PASSWORD");
         driver.findElement(By.id("gg-login-enter")).click();
         Assert.assertEquals(driver.getCurrentUrl(), "https://www.gittigidiyor.com/");
-        logger.info("Login yapıldı");
+        logger.info("Login işlemi kontrol ediliyor.");
 
         driver.findElement(By.xpath("//*[@id=\"main-header\"]/div[3]/div/div/div/div[2]/form/div/div[1]/div[2]/input")).sendKeys("bilgisayar", Keys.RETURN);
-        logger.info("Bilgisayar kelimesi aratıldı");
+        logger.info("Arama kutucuğuna bilgisayar kelimesi girilir.");
 
         JavascriptExecutor js = ((JavascriptExecutor) driver);
         js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
@@ -50,7 +50,7 @@ public class Tests extends BaseTest{
 
         driver.findElement(By.xpath("//*[@id=\"best-match-right\"]/div[5]/ul/li[2]/a")).click();
         Assert.assertEquals(driver.getCurrentUrl(), "https://www.gittigidiyor.com/arama/?k=bilgisayar&sf=2");
-        logger.info("2. Sayfa açıldı");
+        logger.info("Arama sonuçları sayfasından 2.sayfa açılır.");
 
         driver.manage().timeouts().pageLoadTimeout(5, TimeUnit.SECONDS);
         js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
@@ -67,10 +67,10 @@ public class Tests extends BaseTest{
         logger.info("Ürün Fiyatı : " + Price);
 
         driver.findElement(By.id("add-to-basket")).click();
-        logger.info("Ürün sepete eklendi");
+        logger.info("Seçilen ürün sepete eklenir.");
 
         driver.findElement(By.xpath("//*[@id=\"header_wrapper\"]/div[4]/div[3]/a/div[1]")).click();
-        logger.info("Sepete gidildi");
+        logger.info("Sepetim");
 
         WebElement PBasketPrice = driver.findElement(By.xpath("//*[@id=\"cart-price-container\"]/div[3]/p"));
         String BasketPrice = PBasketPrice.getText();
@@ -78,7 +78,7 @@ public class Tests extends BaseTest{
 
 
         Assert.assertEquals(BasketPrice, Price);
-        logger.info("Fiyat doğrulaması yapıldı");
+        logger.info("Ürün sayfasındaki fiyat ile sepette yer alan ürün fiyatının doğruluğu karşılaştırılır.");
 
         Actions action = new Actions(driver);
         WebElement elem = driver.findElement(By.xpath("//*[@class='amount']"));
@@ -86,10 +86,10 @@ public class Tests extends BaseTest{
         action.moveToElement(elem).build().perform();
         action.contextClick(elem).sendKeys(Keys.ARROW_DOWN).sendKeys(Keys.ENTER).build().perform();
 
-        logger.info("Ürün Adedi : 2 ");
+        logger.info("Adet arttırılarak ürün adedinin 2 olduğu doğrulanır.");
 
         driver.findElement(By.cssSelector(".btn-delete.btn-update-item.hidden-m")).click();
-        logger.info("Sepet Boşaltıldı");
+        logger.info("Ürün sepetten silindi.");
 
         Thread.sleep(500);
 
@@ -97,7 +97,7 @@ public class Tests extends BaseTest{
         String Check = BasketCheck.getText();
 
         if (Check.equals("")) {
-            logger.info("Sepet boş");
+            logger.info("Ürün sepetten silinerek sepetin boş olduğu kontrol edilir.");
         }}
 
 
@@ -105,7 +105,7 @@ public class Tests extends BaseTest{
     @After
     public void quit() {
         driver.quit();
-        logger.info("--- TEST SONLANDI ---");
+        logger.info("TEST BAŞARIYLA TAMAMLANDI!");
 
     }
     }
